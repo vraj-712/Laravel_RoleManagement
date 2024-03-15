@@ -123,6 +123,7 @@
         });
     })(jQuery);
 </script>
+<<<<<<< HEAD
 
 
 
@@ -193,3 +194,7 @@
 
 
 @endsection
+=======
+@endsection
+
+>>>>>>> e98404ab508c7e5866fecec62b9974e192e1e515
