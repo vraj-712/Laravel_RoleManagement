@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Permission;
 
 class PermissionCategory extends Model
 {
@@ -11,4 +12,5 @@ class PermissionCategory extends Model
     protected $fillable =[
         'permission_category_name'
     ];
+    
 }

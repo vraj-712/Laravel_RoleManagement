@@ -2,7 +2,7 @@
     <li style='margin:15px 0;'>
         <a href="{{route('post.index')}}" class="btn d-block btn-outline-primary  mx-2 @if (Request::is('frontpanel')) active btn-outline-warning @endif" >FrontPanel</a>
     </li>
-    @hasanyrole(['Admin', 'Super_admin'])
+    {{-- @hasanyrole(['Admin', 'Super_admin', 'Editor']) --}}
         <li style='margin:15px 0;'>
             <a href="{{route('role.index')}}" class="btn d-block btn-outline-primary  mx-2 @if (Request::is('backpanel/role/*') || Request::is('backpanel/role')) active btn-outline-warning @endif" >Roles</a>
         </li>
@@ -15,13 +15,13 @@
         <li style='margin:15px 0;'>
             <a href="{{route('category.index')}}" class="btn d-block btn-outline-primary  mx-2 @if (Request::is('category/*') || Request::is('category')) active btn-outline-warning  @endif" >Category</a>
         </li>
-    @endhasanyrole
-    @hasanyrole(['Editor', 'User', 'Admin', 'Super_admin'])
+    {{-- @endhasanyrole
+    @hasanyrole(['Editor', 'User', 'Admin', 'Super_admin']) --}}
         <li style='margin:15px 0;'>
             <a href="{{route('post.index')}}" class="btn d-block btn-outline-primary  mx-2 @if (Request::is('post/*') || Request::is('post')) active btn-outline-warning  @endif" >Posts</a>
         </li>
         <li style='margin:15px 0;'>
             <a href="{{route('comment.index')}}" class="btn d-block btn-outline-primary  mx-2 @if (Request::is('comment/*') || Request::is('comment')) active btn-outline-warning  @endif" >Comments</a>
         </li>
-    @endhasanyrole
+    {{-- @endhasanyrole --}}
 </ul>

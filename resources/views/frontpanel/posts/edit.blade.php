@@ -46,6 +46,6 @@
 </form>
 @endcan
 @cannot('Update-Post')
-<h1 class="text-center text-danger">Sorry!! You cant Update permission</h1>
+<h1 class="text-center text-danger">Sorry!! You cant Update Post</h1>
 @endcannot
 @endsection

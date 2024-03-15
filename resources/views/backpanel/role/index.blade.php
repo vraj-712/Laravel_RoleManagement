@@ -1,6 +1,6 @@
 @extends('backpanel.index')
 @section('content')
-<div class="m-5">
+<div class="m-2">
     @if (session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
     {{session('success')}}
@@ -19,46 +19,52 @@
 <table class="table table-hover text-center  table-bordered table-bordered table-striped">
     <thead class="table-dark">
     <tr>
-        <th>Role Name</th>
-        <th>Permission</th>
-        <th>Action</th>
+        <th rowspan="2">Role Name</th>
+        <th colspan="{{count(auth()->user()->roles[0]->permissions->groupBy('category_id'))}}">Permission</th>
+        <th rowspan="2">Action</th>
     </tr>
-    </thead>
+    <tr>
+        @foreach (auth()->user()->roles[0]->permissions->groupBy('category_id') as $categorypermission)
+        <th>{{$categorypermission[0]->permissionCategory->permission_category_name}}</th>
+        @endforeach
+    </tr>
+</thead>
         @forelse ($roles as $role)
-        
-        @if (auth()->user()->checkForAssignPermission($role))
+        @if (auth()->user()->checkForAssignPermission($role) && auth()->user()->hasPermissionTo('Assign-Permission'))
         <tr>
-            <td>{{$role->name}}</td>
-            <td class="w-75">
-            <div class="row" id="role-{{$role->id}}" action='{{route('role.assign.permission',$role->id)}}'>
-                @foreach (auth()->user()->roles[0]->permissions as $permission)
-                        <div class="d-flex justify-content-between col-3" >
-                            <label for="{{$permission->id}}">{{$permission->name}}</label>
-                        <input 
+                <td>{{$role->name}}</td>
+                @foreach (auth()->user()->roles[0]->permissions->groupBy('category_id') as $categorypermission)
+                {{-- {{($categorypermission[0]->permissionCategory)}} --}}
+                <td class="" id="role-{{$role->id}}" action='{{route('role.assign.permission',$role->id)}}'>
+                    {{-- {{$categorypermission->category_permission_name}} --}}
+                        @foreach ($categorypermission as $permission)            
+                                                        
+                            <div class="d-flex justify-content-between" >
+                                <label for="{{$permission->id.'-'.$role->id}}">{{$permission->name}}</label>
+                                <input 
                                 type="checkbox" 
                                 name="permission[]" 
-                                id="{{$permission->id}}" 
+                                id="{{$permission->id.'-'.$role->id}}" 
                                 value="{{$permission->name}}" 
                                 @if ($role->hasPermissionTo($permission->id))
-                                    checked
-                                @endif/>
-                        </div>
+                                checked
+                                @endif
+                                />
+                            </div>
+                        @endforeach
+                </td>
+                                
                 @endforeach
-            </div>
-            </td>
-            <td>
-                @can('Update-Role') 
-                    <a href="{{route('role.edit',$role->id)}}" class = "btn  btn-warning   btn-md rounded">Edit</a>
-                @endcan
-                @can('Delete-Role')
-                <form class="d-inline" action="{{route('role.destroy',$role->id)}}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button typr="submit" class = "btn btn-danger btn-md rounded">Delete</button>
-                </form>
-                @endcan
-            </td>
-            </tr>
+                <td>
+                    @can('Delete-Role')
+                    <form class="d-inline" action="{{route('role.destroy',$role->id)}}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <button typr="submit" class = "btn btn-danger btn-md rounded">Delete</button>
+                    </form>
+                    @endcan
+                </td>
+        </tr>
         @endif
         @empty
             <tr>
@@ -118,3 +124,4 @@
     })(jQuery);
 </script>
 @endsection
+

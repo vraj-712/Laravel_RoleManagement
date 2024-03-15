@@ -9,6 +9,9 @@
         </div>
         @endif
         @include('backpanel.layouts.errors')
+        @can('Update-User')
+            
+        
         <form action="{{ route('user.update', $user->id)}}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -50,5 +53,9 @@
             <button class="btn btn-outline-success rounded btn" type="submit">Update User</button>
             <a href="{{ route('user.index') }}" class="btn btn-outline-success btn">All Users</a>
         </form>
+        @endcan
+        @cannot('Update-User')
+        <h1 class="text-center text-danger">Sorry!! You cant Update User</h1>
+        @endcannot
     </div>
     @endsection
