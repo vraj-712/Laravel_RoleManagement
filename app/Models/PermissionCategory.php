@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PermissionCategory extends Model
 {
     use HasFactory;
+    protected $fillable =[
+        'permission_category_name'
+    ];
 }

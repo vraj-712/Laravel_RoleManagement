@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PremissionRequest;
+use App\Models\PermissionCategory;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -23,7 +24,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        return view('backpanel.permission.create');
+        return view('backpanel.permission.create')->with('permission_categories', PermissionCategory::all());
     }
 
     /**
@@ -33,7 +34,9 @@ class PermissionController extends Controller
     {
         $permission = new Permission();
         $permission->name = $request->name;
+        $permission->category_id = $request->permission_category_id;
         $permission->save();
+
         
         $role = Role::findByName('Super_admin');
         $role->syncPermissions(Permission::all());
