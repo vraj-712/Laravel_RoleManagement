@@ -31,7 +31,7 @@
             </div>
             <div class="card-body">
                 <div class="card-img">
-                    <img class="rounded mb-3"src="{{asset('images').'/'.$post->image}}"  style="object-fit: cover; box-shadow:0px 0px 10px 5px;" width="100%" height="350" alt="">
+                    <img class="rounded mb-3"src="{{asset('images').'/'.$post->image}}"  style="object-fit:cover;box-shadow:0px 0px 10px 5px;" width="100%" height="550" alt="">
                 </div>
                 <p>{{$post->content}}</p>
             </div>
