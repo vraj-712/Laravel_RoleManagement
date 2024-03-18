@@ -13,7 +13,7 @@
 @include('backpanel.layouts.errors')
 <h2>All User</h2>
 <div class="d-flex justify-content-between">
-    @can('Create-User')
+    @can('Create User')
     <a href="{{route('user.create')}}" class="btn btn-outline-success  btn">Create User</a>
     @endcan
 </div>
@@ -33,12 +33,12 @@
             <td>{{$user->email}}</td>
             <td>{{$user->roles[0]->name}}</td>
             <td>
-                @can('Update-User')
+                @can('Update User')
                 @if ($user->checkAccessForUpdate($user))
                     <a href="{{ route('user.edit',$user->id) }}" class = "btn btn-warning  btn-md rounded">Edit</a>    
                 @endif
                 @endcan
-                @can('Delete-User')
+                @can('Delete User')
                 @if ($user->checkAccessForDelete($user))
                 <form action="{{ route('user.destroy',$user->id) }}" class="d-inline" method="POST">
                     @csrf

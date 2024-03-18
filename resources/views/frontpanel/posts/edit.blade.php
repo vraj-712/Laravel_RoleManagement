@@ -7,7 +7,7 @@
     <a href="{{ route('post.index') }}" class="btn btn-primary btn-lg">All Posts</a>
 </div>
 @include('backpanel.layouts.errors')
-@can('Update-Post')
+@can('Update Post')
     
 <form action="{{ route('post.update',$post->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
@@ -45,7 +45,7 @@
    <button class="btn btn-success rounded btn-lg"  value="Change Post" type="submit">Update Post</button>
 </form>
 @endcan
-@cannot('Update-Post')
+@cannot('Update Post')
 <h1 class="text-center text-danger">Sorry!! You cant Update Post</h1>
 @endcannot
 @endsection

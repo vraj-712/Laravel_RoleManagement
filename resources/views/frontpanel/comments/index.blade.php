@@ -32,7 +32,7 @@
                 @endif
             </td>
             <td>
-                @can('Check-Comment')
+                @can('Check Comment')
                     <form action="{{route('approve-comment',$comment->id)}}" method="POST" class='d-inline'>
                         @csrf
                         @if(!$comment->status)
@@ -42,7 +42,7 @@
                         @endif
                     </form>
                 @endcan
-                @can('Delete-Comment')
+                @can('Delete Comment')
                     @if (auth()->user()->deleteCommentPermission($comment))
                         <form action="{{route('comment.destroy', $comment->id)}}" method="POST" class='d-inline'> 
                             @csrf

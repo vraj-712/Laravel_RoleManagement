@@ -16,7 +16,7 @@ class PermissionCategoryController extends Controller
     }
     public function store(Request $request){
         PermissionCategory::create([
-            'permission_category_name' => $request->category_name,
+            'permission_category_name' =>ucfirst ( $request->categoryName),
         ]);
         return redirect()->route('category.index')->with('success','Category Created SuccessFully ');
     }

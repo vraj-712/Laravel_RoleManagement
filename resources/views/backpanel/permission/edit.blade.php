@@ -4,7 +4,8 @@
         <div class="d-flex justify-content-between">
         </div>
         @include('backpanel.layouts.errors')
-        @can('Update-Permission')
+        @can('Update 
+Permission')
             
         <form action="{{ route('permission.update', $permission->id)}}" method="POST">
             @csrf
@@ -27,7 +28,8 @@
                 <a href="{{ route('permission.index') }}" class="btn btn-outline-success btn">All permissions</a>
             </form>
         @endcan
-        @cannot('Update-Permission')
+        @cannot('Update 
+Permission')
                 <h1 class="text-center text-danger">Sorry!! You cant Update permission</h1>
         @endcannot
     </div>

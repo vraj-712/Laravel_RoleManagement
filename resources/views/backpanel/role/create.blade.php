@@ -3,8 +3,8 @@
 @section('content')
 <div class="m-5">
     
-@includ
-@can('Create-Role')
+@include('backpanel.layouts.errors')
+@can('Create Role')
     
 <form action="{{ route('role.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -24,7 +24,7 @@
         <a href="{{ route('role.index') }}" class="btn btn-outline-success btn">All Roles</a>
     </form>
 @endcan('backpanel.layouts.errors')
-@cannot('Create-Role')
+@cannot('Create Role')
     <h1 class="text-center text-danger">Sorry!! You cant create Role</h1>
 @endcannot
 </div>

@@ -11,7 +11,7 @@
         @endif
         @include('backpanel.layouts.errors')
         <h1 class="text-center">Assing Pemission To Role: {{$role->name}}</h1>
-        @can('Assign-Permission')
+        @can('Assign Permission')
         <form action="{{route('role.store.permission',$role->id)}}" method="POST">
             @csrf
             <div class="form-group">
@@ -48,7 +48,7 @@
                 <a href="{{ route('role.index') }}" class="btn btn-outline-success">All Roles</a>
             </form>
             @endcan
-            @cannot('Assign-Permission')
+            @cannot('Assign Permission')
                 <h1 class="text-center text-danger">Sorry!! You cant assign permission</h1>
             @endcannot
                     

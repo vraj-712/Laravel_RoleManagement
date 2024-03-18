@@ -65,7 +65,7 @@
                                 </nav>
                             @endif
                         </header>
-                        @can('Create-Post', auth()->user())
+                        @can('Create Post', auth()->user())
                             <div class="d-flex justify-content-between">
                                 <a href="{{route('post.create')}}" class="btn btn-primary btn-lg">Create post</a>
                             </div>

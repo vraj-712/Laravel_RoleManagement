@@ -9,7 +9,7 @@
         </div>
         @endif
         @include('backpanel.layouts.errors')
-        @can('Update-User')
+        @can('Update User')
             
         
         <form action="{{ route('user.update', $user->id)}}" method="POST" enctype="multipart/form-data">
@@ -54,7 +54,7 @@
             <a href="{{ route('user.index') }}" class="btn btn-outline-success btn">All Users</a>
         </form>
         @endcan
-        @cannot('Update-User')
+        @cannot('Update User')
         <h1 class="text-center text-danger">Sorry!! You cant Update User</h1>
         @endcannot
     </div>

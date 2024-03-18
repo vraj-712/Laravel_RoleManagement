@@ -33,8 +33,8 @@ class PermissionController extends Controller
     public function store(PremissionRequest $request)
     {
         $permission = new Permission();
-        $permission->name = $request->name;
-        $permission->category_id = $request->permission_category_id;
+        $permission->name = $request->permissionName.' '. $request->permissionCategoryName;
+        $permission->category_id = $request->permissionCategoryId;
         $permission->save();
 
         
@@ -43,13 +43,13 @@ class PermissionController extends Controller
         
         return redirect()->route('permission.index');
     }
-
+    
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-
+        
     }
     
     /**
@@ -59,14 +59,17 @@ class PermissionController extends Controller
     {
         return view('backpanel.permission.edit')->with('permission',$permission);
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
     public function update(PremissionRequest $request, Permission $permission)
     {
-        $permission->update($request->all());
-        return redirect()->route('permission.index');
+        $permission->update([
+            'name' => $request->permissionName .' '. $request->newPermissionCategoryName,
+            'category_id' => $request->newPermissionCategoryId
+        ]);
+       
     }
 
     /**

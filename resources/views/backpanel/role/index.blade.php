@@ -12,7 +12,7 @@
 <h2>All Roles</h2>
 <div class="d-flex justify-content-between">
     
-    @can('Create-Role')
+    @can('Create Role')
     <a href="{{route('role.create')}}" class="btn btn-outline-success  btn">Create Role</a>
     @endcan
 </div>
@@ -30,7 +30,8 @@
     </tr>
 </thead>
         @forelse ($roles as $role)
-        @if (auth()->user()->checkForAssignPermission($role) && auth()->user()->hasPermissionTo('Assign-Permission'))
+        {{-- && auth()->user()->hasPermissionTo(['Assign Permission'] --}}
+        @if (auth()->user()->checkForAssignPermission($role) && auth()->user()->hasPermissionTo('Assign Permission' ))
         <tr>
                 <td>{{$role->name}}</td>
                 @foreach (auth()->user()->roles[0]->permissions->groupBy('category_id') as $categorypermission)
@@ -40,7 +41,8 @@
                         @foreach ($categorypermission as $permission)            
                                                         
                             <div class="d-flex justify-content-between" >
-                                <label for="{{$permission->id.'-'.$role->id}}">{{$permission->name}}</label>
+                                <label for="{{$permission->id.'-'.$role->id}}">{{explode(' ', $permission->name)[0]}}</label>
+                                {{-- <label for="{{$permission->id.'-'.$role->id}}">{{$permission->name}}</label> --}}
                                 <input 
                                 type="checkbox" 
                                 name="permission[]" 
@@ -56,7 +58,7 @@
                                 
                 @endforeach
                 <td>
-                    @can('Delete-Role')
+                    @can('Delete Role')
                     <form class="d-inline" action="{{route('role.destroy',$role->id)}}" method="POST">
                         @csrf
                         @method('delete')

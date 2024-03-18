@@ -24,12 +24,12 @@
             <td>{{$post->title}}</td>
             <td>{{substr($post->content,0 , 30)}}....</td>
             <td>
-                @can('Update-Post')
+                @can('Update Post')
                 @if (auth()->user()->UpdateAndDeletePost($post))
                 <a href="{{ route('post.edit',$post->id) }}" class = "btn btn-info btn-md rounded">Edit</a> 
                 @endif
                 @endcan
-                @can('Delete-Post')
+                @can('Delete Post')
                 @if (auth()->user()->UpdateAndDeletePost($post))
                 <form action="{{ route('post.destroy',$post->id) }}" method="POST" class="d-inline">
                     @csrf

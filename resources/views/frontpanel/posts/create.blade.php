@@ -6,7 +6,7 @@
     <a href="{{ route('post.index') }}" class="btn btn-primary btn-lg">All Posts</a>
 </div>
 @include('backpanel.layouts.errors')
-@can('Create-Post')
+@can('Create Post')
 <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group my-4">
@@ -37,7 +37,7 @@
         <button class="btn btn-success rounded btn-lg" type="submit">Save Post</button>
     </form>
 @endcan
-    @cannot('Create-Post')
+    @cannot('Create Post')
     <h1 class="text-center text-danger">Sorry!! You cant Create Post</h1>
 @endcannot
 </div>

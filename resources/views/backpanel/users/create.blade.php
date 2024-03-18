@@ -4,7 +4,7 @@
     <div class="m-5">
         
         @include('backpanel.layouts.errors')
-        @can('Create-User')
+        @can('Create User')
         <form action="{{ route('user.store') }}" method="POST" class="" enctype="multipart/form-data">
             @csrf
             <div class="form-group my-4">
@@ -57,7 +57,7 @@
                 <a href="{{ route('user.index') }}" class="btn btn-outline-success btn">All Users</a>
             </form>
             @endcan
-            @cannot('Craete-User')
+            @cannot('Create User')
             <h1 class="text-center text-danger">Sorry!! You cant Create User</h1>
             @endcannot
     </div>
