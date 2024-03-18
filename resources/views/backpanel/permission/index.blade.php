@@ -10,10 +10,13 @@
 @include('backpanel.layouts.errors')
 
 <h2>All permissions</h2>
-<div class="d-flex justify-content-between">
+<div class="justify-content-between d-inline-block my-3">
     @can('Create Permission')
     <a href="{{route('permission.create')}}" class="btn btn-outline-success  btn">Create Permission</a>
     @endcan
+</div>
+<div class="d-inline-block my-3 justify-content-between">
+    <button  class="btn btn-outline-success  create-action-btn">Create Action</button>
 </div>
 <table class="table table-hover text-center  table-bordered table-bordered table-striped  ">
     <thead class="table-dark">
@@ -74,7 +77,7 @@
 
 
 
-{{-- Modal --}}
+{{-- Modal For Edit --}}
             <div class="modal" id="myModal">
                 <div class="modal-dialog">
                 <div class="modal-content">
@@ -125,6 +128,46 @@
                 </div>
             </div>
 {{-- Modal End --}}
+
+{{-- Modal For Create Action --}}
+<div class="modal" id="myModal2">
+    <div class="modal-dialog">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+        <h4 class="modal-title">Update Permission</h4>
+        
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+
+                <div class="form-group my-4">
+                    <label for="action_name">Action Name</label>
+                    <input 
+                    style="border:2px solid purple;padding:5px 5px"
+                    id="action_name" 
+                    name="action_name" 
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter Action Name"
+                        />
+                    </div>
+                    
+                    
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="modal-footer">
+            <button class="btn btn-outline-success rounded add-action-btn" data-action="{{route('action.store')}}">Add Action</button>
+        <button type="button" class="btn btn-danger cls-btn">Close</button>
+        </div>
+
+    </div>
+    </div>
+</div>
+{{-- Modal End For Create Action --}}
 </div>
 @endsection
 @section('script')
@@ -177,7 +220,28 @@
         $('.cls-btn').click(function(e){
             $('#permissionname').val('');
             $('#myModal').hide()
+            $('#myModal2').hide()
         });
+        $('.create-action-btn').click(function(e){
+            $('#myModal2').show();
+        });
+        $('.add-action-btn').click(function(e){
+            let actionName = $('#action_name').val();
+            let url = $(this).data('action')
+            console.log(url);
+            let patternForAction= new RegExp('^[a-zA-Z0-9]+$');
+            if(patternForAction.test(actionName)){
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {action_name:actionName},
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            }
+            
+        })
     });
 })(jQuery);
 </script>

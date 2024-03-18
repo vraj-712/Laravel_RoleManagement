@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActionPermissionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PermissionCategoryController;
 use App\Http\Controllers\PermissionController;
@@ -44,6 +45,7 @@ Route::group(['middleware' =>['auth', 'role:Admin|Super_admin|Editor'], 'prefix'
     Route::get('/category',[PermissionCategoryController::class,'index'])->name('category.index');
     Route::get('/category/create',[PermissionCategoryController::class,'create'])->name('category.create');
     Route::post('/category/create',[PermissionCategoryController::class,'store'])->name('category.store');
+    Route::post('/action/create',[ActionPermissionController::class, 'store'])->name('action.store');
 });
 Route::group(['middleware' =>['auth', 'role:Admin|Super_admin|Editor|User'],'prefix' => 'frontpanel'],function(){
     
