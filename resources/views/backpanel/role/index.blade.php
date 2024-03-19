@@ -87,7 +87,8 @@
                 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
             }
         });
-            $("input").change(function(){
+
+        $("input").change(function(){
                 
                 // console.log($('[name="permission[]"]:checked')) ---> Give All Checked Element Which Have name=permission[]
                 console.log($(this)[0].value) //---> this give Check Box Id  

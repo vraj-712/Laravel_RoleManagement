@@ -62,87 +62,6 @@
       @endforeach
     </tbody>
   </table>
-{{-- td {
-    border: 1pt solid black;
-}
-
-td.diagonalRising {
-    background: linear-gradient(to right bottom, #ffffff 0%, #ffffff 49.9%, #000000 50%, #000000 51%, #ffffff 51.1%, #ffffff 100%);
-}
-
-td.diagonalFalling {
-    background: linear-gradient(to right top, #ffffff 0%, #ffffff 49.9%, #000000 50%, #000000 51%, #ffffff 51.1%, #ffffff 100%);
-}
-
-td.diagonalCross {
-    position: relative;
-    background: linear-gradient(to right bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 49.9%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 51%, rgba(0, 0, 0, 0) 51.1%, rgba(0, 0, 0, 0) 100%);
-}
-
-td.diagonalCross:after {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    background: linear-gradient(to right top, #ffffff 0%, #ffffff 49.9%, #000000 50%, #000000 51%, #ffffff 51.1%, #ffffff 100%);
-}
- --}}
-
-{{-- Modal For Edit --}}
-            {{-- <div class="modal" id="myModal">
-                <div class="modal-dialog">
-                <div class="modal-content">
-            
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                    <h4 class="modal-title">Update Permission</h4>
-                    
-                    </div>
-            
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <div class="form-group my-4">
-                            <input type="hidden" id='permissionid'>
-                        </div>
-
-                        <div class="form-group my-3">
-                            <label for="permission_categories">Categories</label>
-                            <select name="permission_category_id" id="permission_category_id" class='form-control' style="border:2px solid purple;padding:5px;">
-                                <option value="AAA" hidden >--Select Role--</option>
-                                @foreach ($permissions->groupBy('category_id') as $categoryPermission)
-                                    <option data-name="{{$categoryPermission[0]->permissionCategory->permission_category_name}}" value="{{$categoryPermission[0]->permissionCategory->id}}">{{$categoryPermission[0]->permissionCategory->permission_category_name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                            <div class="form-group my-4">
-                                <input 
-                                style="border:2px solid purple;padding:5px 5px"
-                                id="permissionname" 
-                                name="name" 
-                                type="text"
-                                class="form-control"
-                                placeholder="Enter permission Name"
-                                    />
-                                </div>
-                                
-                                
-                            </div>
-                            
-                            <!-- Modal footer -->
-                            <div class="modal-footer">
-                        <button class="btn btn-outline-success rounded update-btn" >Update permission</button>
-                    <button type="button" class="btn btn-danger cls-btn">Close</button>
-                    </div>
-            
-                </div>
-                </div>
-            </div> --}}
-{{-- Modal End --}}
 
 {{-- Modal For Create Action --}}
 <div class="modal" id="myModal2">
@@ -208,6 +127,7 @@ td.diagonalCross:after {
 
             
         });
+        
         $('.update-btn').click(function(e){
             let newPermissionName = $('#permissionname').val();
             let newPermissionCategoryId = $('#permission_category_id').val();
@@ -222,14 +142,17 @@ td.diagonalCross:after {
 
             
         });
+
         $('.cls-btn').click(function(e){
             $('#permissionname').val('');
             $('#myModal').hide()
             $('#myModal2').hide()
         });
+
         $('.create-action-btn').click(function(e){
             $('#myModal2').show();
         });
+
         $('.add-action-btn').click(function(e){
             let actionName = $('#action_name').val();
             let url = $(this).data('action')

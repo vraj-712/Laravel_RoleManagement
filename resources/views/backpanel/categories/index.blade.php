@@ -87,11 +87,13 @@
             $('#myModal').show();
             
         });
+        
         $('.cls-btn').click(function (e) { 
             e.preventDefault();
             $('#myModal').hide();
             
         });
+
         $('.add-btn').click(function (e) { 
             e.preventDefault();
             let categoryName = $('#category_name').val()

@@ -69,15 +69,16 @@ class User extends Authenticatable
         $isEditor = auth()->user()->hasRole('Editor');
         
         if($isSuperAdmin){
+            
             return true;
-        }
-        elseif ($isAdmin) {
+        }elseif ($isAdmin) {
+            
             return $role->name!='Super_admin';
-        }
-        elseif ($isEditor) {
+        }elseif ($isEditor) {
+            
             return $role->name!='Super_admin' && $role->name!='Admin';
-        }
-        else {
+        }else {
+            
             return $role->name == 'user';
         }
     }
@@ -87,15 +88,18 @@ class User extends Authenticatable
         $isEditor = auth()->user()->hasRole( 'Editor');
         
         if($isSuperAdmin){
+            
             return true;
-        }
-        elseif ($isAdmin) {
+        }elseif ($isAdmin) {
+            
             return $role->name!='Super_admin' && $role->name!='Admin';
-        }
-        elseif ($isEditor) {
+
+        }elseif ($isEditor) {
+            
             return $role->name!='Super_admin' && $role->name!='Admin' && $role->name!='Editor';
         }
         else {
+
             return $role->name == 'user';
         }
     }

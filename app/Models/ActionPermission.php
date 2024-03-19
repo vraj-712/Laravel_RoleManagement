@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ActionPermission extends Model
 {
     use HasFactory;
-    protected $fillable =[ 'action_name' ];
+    protected $fillable =[ 
+        'action_name' 
+    ];
 }

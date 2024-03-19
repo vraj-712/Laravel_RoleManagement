@@ -21,38 +21,40 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/', function () {
     return view('welcome')->with('posts', Post::all());
 });
 
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard');
-    // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 Route::group(['middleware' =>['auth', 'role:Admin|Super_admin|Editor'], 'prefix' => 'backpanel'],function(){
     Route::get('/', [UserController::class, 'index'])->name('backpanel.index');
     Route::get('/role/{role}/assignPermission',[RoleController::class,'assignPermissionView'])->name('role.assign.permission');
     Route::post('/role/{role}/assignPermission',[RoleController::class,'assignPermission'])->name('role.store.permission');
-    Route::resource('/role',RoleController::class);
-    Route::resource('/permission',PermissionController::class);
-    Route::resource('/user',UserController::class);
     Route::get('/category',[PermissionCategoryController::class,'index'])->name('category.index');
     Route::get('/category/create',[PermissionCategoryController::class,'create'])->name('category.create');
     Route::post('/category/create',[PermissionCategoryController::class,'store'])->name('category.store');
     Route::post('/action/create',[ActionPermissionController::class, 'store'])->name('action.store');
+    Route::resource('/role',RoleController::class);
+    Route::resource('/permission',PermissionController::class);
+    Route::resource('/user',UserController::class);
 });
+
 Route::group(['middleware' =>['auth', 'role:Admin|Super_admin|Editor|User'],'prefix' => 'frontpanel'],function(){
     
     Route::get('/', [PostController::class, 'index'])->name('frontpanel.index');
+    Route::post('/comment-approve/{comment}',[CommentController::class, 'approveComment'])->name('approve-comment');
     Route::resource('/post',PostController::class);
     Route::resource('/comment',CommentController::class);
-    Route::post('/comment-approve/{comment}',[CommentController::class, 'approveComment'])->name('approve-comment');
 });
 
 

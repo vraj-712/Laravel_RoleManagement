@@ -15,8 +15,7 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(){
         $categoryPermissions = PermissionCategory::all();
         $permissions = Permission::all();
         $permissionsAction = ActionPermission::all();
@@ -27,16 +26,14 @@ class PermissionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function create(){
         return view('backpanel.permission.create')->with('permission_categories', PermissionCategory::all());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PremissionRequest $request)
-    {
+    public function store(PremissionRequest $request){
 
         $permission = new Permission();
         $permission->name = $request->permissionName;
@@ -53,24 +50,21 @@ class PermissionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
+    public function show(string $id){
         
     }
     
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Permission $permission)
-    {
+    public function edit(Permission $permission){
         return view('backpanel.permission.edit')->with('permission',$permission);
     }
     
     /**
      * Update the specified resource in storage.
      */
-    public function update(PremissionRequest $request, Permission $permission)
-    {
+    public function update(PremissionRequest $request, Permission $permission){
         $permission->update([
             'name' => $request->permissionName .' '. $request->newPermissionCategoryName,
             'category_id' => $request->newPermissionCategoryId
@@ -81,8 +75,7 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request){
         $permission = Permission::findByName($request->permissionName);
     //    return  $permission;
         $permission->delete();

@@ -19,8 +19,7 @@ class UserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
+    public function rules(): array{
         $on_update_for_password = $this->method() == 'PUT' ? "" : 'required';
         $on_update_for_email = $this->method() == "PUT" ? "": "|required|unique:users,email";
         return [
