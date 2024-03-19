@@ -46,7 +46,6 @@
                         @if ($singlePermission->category_id === $categoryPermission->id && $singlePermission->action_id === $action->id)
                             checked
                             data-permissionid={{$singlePermission->id}}
-                            data-deleteurl = "{{route('permission.destroy',$singlePermission->id)}}"
                         @endif
                     @endforeach
                     />
@@ -214,7 +213,7 @@
                     url: url,
                     data: data,
                     success: function (response) {
-                        // location.reload();
+                        console.log(response)
                     }
                 });
         }
@@ -226,8 +225,10 @@
                 let actionId = $(this).parent().parent().parent().data('action_id');
                 let permissionName = $(this).val();
                 let permissionId = $(this).data('permissionid') ?? null;
-                let permissionDeleteUrl = $(this).data('deleteurl') ?? null;
-                console.log('Delete Url '+permissionDeleteUrl);
+                let route = "{{ route('permission.destroy', ':id')}}";
+                let url = route.replace(':id', permissionName);
+
+                console.log('Delete Url '+url);
                 console.log('PermissionId '+permissionId);
                 console.log('PermissionName '+permissionName)
                 console.log('ActionId '+actionId)
@@ -237,7 +238,7 @@
                     ajaxRequest("POST", "{{route('permission.store')}}", {permissionName, permissionCategoryId:categoryId, permissionActionId:actionId})
                 }else{
                     console.log("In Delete")
-                    ajaxRequest("DELETE", permissionDeleteUrl,{permissionName});
+                    ajaxRequest("DELETE", url, {permissionName});
                 }
         })
     });

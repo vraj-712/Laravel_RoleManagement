@@ -84,6 +84,7 @@ class PermissionController extends Controller
     public function destroy(Request $request)
     {
         $permission = Permission::findByName($request->permissionName);
+    //    return  $permission;
         $permission->delete();
 
     }

@@ -31,7 +31,7 @@
 </thead>
         @forelse ($roles as $role)
         {{-- && auth()->user()->hasPermissionTo(['Assign Permission'] --}}
-        @if (auth()->user()->checkForAssignPermission($role) && auth()->user()->hasPermissionTo('Assign Permission' ))
+        @if (auth()->user()->checkForAssignPermission($role) && (auth()->user()->hasPermissionTo('Assign Permission' ) ?? null))
         <tr>
                 <td>{{$role->name}}</td>
                 @foreach (auth()->user()->roles[0]->permissions->groupBy('category_id') as $categorypermission)
