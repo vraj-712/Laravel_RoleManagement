@@ -18,19 +18,24 @@
 <div class="d-inline-block my-3 justify-content-between">
     <button  class="btn btn-outline-success  create-action-btn">Create Action</button>
 </div>
-<table class="table text-center">
+<table class="table table-group-divider table-bordered  table-striped  " style="border: 2px solid black;">
     <thead>
-      <tr>
-        <th scope="col">#</th>
+      <tr style="border-bottom: 2px solid black">
+        
+        <th class="text-dark" style="background: linear-gradient(to right top, #fff 0%, #fff 49.9%, #212529 50%, #212529 51%, #fff 51.1%, #fff 100%);" rowspan="2">
+            <p class="m-0 p-0 text-end">Category</p>
+            <p class="m-0 p-0 text-start">Action</p>
+        </th>
         @foreach ($categoryPermissions as $categoryPermission)
-        <th>{{$categoryPermission->permission_category_name}}</th>
+        <th class="text-center text-bg-white" style="vertical-align:baseline;">{{$categoryPermission->permission_category_name}}</th>
         @endforeach
       </tr>
     </thead>
     <tbody>
+        
       @foreach ($permissionsAction as $action)
           <tr data-action_id="{{$action->id}}">
-            <td>{{$action->action_name  }}</td>
+            <td class="text-bg-white">{{$action->action_name  }}</td>
             @foreach ($categoryPermissions as $categoryPermission)
             <td data-category_id="{{$categoryPermission->id}}">
                 
@@ -41,6 +46,7 @@
                     type="checkbox" 
                     name="permission[]" 
                     id=""
+                    class="form-check-input border-black "
                     value="{{$action->action_name.' '.$categoryPermission->permission_category_name}}" 
                     @foreach ($permissions as $singlePermission)
                         @if ($singlePermission->category_id === $categoryPermission->id && $singlePermission->action_id === $action->id)
@@ -56,7 +62,35 @@
       @endforeach
     </tbody>
   </table>
+{{-- td {
+    border: 1pt solid black;
+}
 
+td.diagonalRising {
+    background: linear-gradient(to right bottom, #ffffff 0%, #ffffff 49.9%, #000000 50%, #000000 51%, #ffffff 51.1%, #ffffff 100%);
+}
+
+td.diagonalFalling {
+    background: linear-gradient(to right top, #ffffff 0%, #ffffff 49.9%, #000000 50%, #000000 51%, #ffffff 51.1%, #ffffff 100%);
+}
+
+td.diagonalCross {
+    position: relative;
+    background: linear-gradient(to right bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 49.9%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 1) 51%, rgba(0, 0, 0, 0) 51.1%, rgba(0, 0, 0, 0) 100%);
+}
+
+td.diagonalCross:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background: linear-gradient(to right top, #ffffff 0%, #ffffff 49.9%, #000000 50%, #000000 51%, #ffffff 51.1%, #ffffff 100%);
+}
+ --}}
 
 {{-- Modal For Edit --}}
             {{-- <div class="modal" id="myModal">

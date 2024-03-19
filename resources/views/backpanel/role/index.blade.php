@@ -40,12 +40,13 @@
                     {{-- {{$categorypermission->category_permission_name}} --}}
                         @foreach ($categorypermission as $permission)            
                                                         
-                            <div class="d-flex justify-content-between" >
+                            <div class="d-flex justify-content-between " >
                                 <label for="{{$permission->id.'-'.$role->id}}">{{explode(' ', $permission->name)[0]}}</label>
                                 {{-- <label for="{{$permission->id.'-'.$role->id}}">{{$permission->name}}</label> --}}
                                 <input 
                                 type="checkbox" 
                                 name="permission[]" 
+                                class="form-check-input border-black form-check-inline form"
                                 id="{{$permission->id.'-'.$role->id}}" 
                                 value="{{$permission->name}}" 
                                 @if ($role->hasPermissionTo($permission->id))
