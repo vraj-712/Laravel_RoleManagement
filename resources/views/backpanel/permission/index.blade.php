@@ -54,6 +54,9 @@
                             data-permissionid={{$singlePermission->id}}
                         @endif
                     @endforeach
+                    @cannot('Create Permission')
+                        disabled
+                    @endcannot
                     />
                 </div>
             </td>
@@ -127,7 +130,7 @@
 
             
         });
-        
+
         $('.update-btn').click(function(e){
             let newPermissionName = $('#permissionname').val();
             let newPermissionCategoryId = $('#permission_category_id').val();

@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::group(['middleware' =>['auth', 'role:Admin|Super_admin|Editor'], 'prefix' => 'backpanel'],function(){
+Route::group(['middleware' =>['auth', 'role:Admin|Super_admin'], 'prefix' => 'backpanel'],function(){
     Route::get('/', [UserController::class, 'index'])->name('backpanel.index');
     Route::get('/role/{role}/assignPermission',[RoleController::class,'assignPermissionView'])->name('role.assign.permission');
     Route::post('/role/{role}/assignPermission',[RoleController::class,'assignPermission'])->name('role.store.permission');

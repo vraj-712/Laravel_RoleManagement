@@ -45,6 +45,14 @@
                                             Backpanel
                                         </a>
                                     @endhasanyrole
+                                    @hasanyrole('User')
+                                        <a
+                                        href="{{ route('frontpanel.index') }}"
+                                        class="rounded-md text-white px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                    >
+                                        FrontPanel
+                                    </a>
+                                    @endhasanyrole
                                     @else
                                         <a
                                             href="{{ route('login') }}"
