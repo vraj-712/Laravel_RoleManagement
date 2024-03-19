@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PremissionRequest;
+use App\Models\ActionPermission;
 use App\Models\PermissionCategory;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
@@ -16,7 +17,11 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        return view('backpanel.permission.index')->with('permissions', Permission::all());
+        $categoryPermissions = PermissionCategory::all();
+        $permissions = Permission::all();
+        $permissionsAction = ActionPermission::all();
+
+        return view('backpanel.permission.index',compact(['categoryPermissions', 'permissions', 'permissionsAction']));
     }
 
     /**
@@ -32,16 +37,17 @@ class PermissionController extends Controller
      */
     public function store(PremissionRequest $request)
     {
+
         $permission = new Permission();
-        $permission->name = $request->permissionName.' '. $request->permissionCategoryName;
+        $permission->name = $request->permissionName;
         $permission->category_id = $request->permissionCategoryId;
+        $permission->action_id = $request->permissionActionId;
         $permission->save();
 
         
         $role = Role::findByName('Super_admin');
         $role->syncPermissions(Permission::all());
         
-        return redirect()->route('permission.index');
     }
     
     /**
@@ -75,9 +81,10 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy(Request $request)
     {
+        $permission = Permission::findByName($request->permissionName);
         $permission->delete();
-        return redirect()->route('permission.index');
+
     }
 }

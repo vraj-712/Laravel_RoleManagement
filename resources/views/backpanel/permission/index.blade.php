@@ -18,67 +18,49 @@
 <div class="d-inline-block my-3 justify-content-between">
     <button  class="btn btn-outline-success  create-action-btn">Create Action</button>
 </div>
-<table class="table table-hover text-center  table-bordered table-bordered table-striped  ">
-    <thead class="table-dark">
-    <tr>
-        {{-- colspan="{{count(auth()->user()->roles[0]->permissions->groupBy('category_id'))}}" --}}
-        <th  >Permissions</th>
-        <th>Action</th>
-    </tr>
-    {{-- <tr>
-
-        @foreach ($permissions->groupBy('category_id') as $categoryPermission)
-            @foreach ($categoryPermission as $permission)
-                {{($permission->name)}}
+<table class="table text-center">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        @foreach ($categoryPermissions as $categoryPermission)
+        <th>{{$categoryPermission->permission_category_name}}</th>
+        @endforeach
+      </tr>
+    </thead>
+    <tbody>
+      @foreach ($permissionsAction as $action)
+          <tr data-action_id="{{$action->id}}">
+            <td>{{$action->action_name  }}</td>
+            @foreach ($categoryPermissions as $categoryPermission)
+            <td data-category_id="{{$categoryPermission->id}}">
+                
+                <div class="d-flex justify-content-center" >
+                    {{-- <label for="">{{$action->action_name.' '.$categoryPermission->permission_category_name}}</label> --}}
+                    {{-- <label for="{{$permission->id.'-'.$role->id}}">{{$permission->name}}</label> --}}
+                    <input 
+                    type="checkbox" 
+                    name="permission[]" 
+                    id=""
+                    value="{{$action->action_name.' '.$categoryPermission->permission_category_name}}" 
+                    @foreach ($permissions as $singlePermission)
+                        @if ($singlePermission->category_id === $categoryPermission->id && $singlePermission->action_id === $action->id)
+                            checked
+                            data-permissionid={{$singlePermission->id}}
+                            data-deleteurl = "{{route('permission.destroy',$singlePermission->id)}}"
+                        @endif
+                    @endforeach
+                    />
+                </div>
+            </td>
             @endforeach
-        @endforeach
-    </tr> --}}
-</thead>
-
-    @foreach ($permissions->groupBy('category_id') as $categoryPermission)
-    
-    
-    <tbody  data-category={{$categoryPermission[0]->permissionCategory->id}}>
-        <tr style="font-size:20px;"><td style="background:#5a5e61; color:white;"colspan="2">{{$categoryPermission[0]->permissionCategory->permission_category_name}}</td></tr>
-            @forelse ($categoryPermission as $permission)
-            <tr >
-                <td>
-                    {{explode(' ' ,$permission->name)[0]}}
-                </td>
-                <td>
-                            @can('Update Permission')
-                            {{-- href="{{ route('permission.edit',$permission->id) }}" --}}
-                        <button  
-                        class = "btn btn-warning btn-md rounded edit-btn"
-                                id="{{$permission->id}}"
-                                data-name="{{$permission->name}}"
-                                data-action = "{{ route('permission.update', $permission->id)}}"
-                                >Edit</button>
-                                @endcan
-                                {{-- @can('Delete Permission')
-                                
-                                <form class="d-inline" action="{{ route('permission.destroy',$permission->id) }}" method="POST">
-                                    @csrf
-                                    @method('delete')
-                                    <button   button typr="submit" class = "btn btn-danger btn-md rounded">Delete</button>
-                                </form>
-                                @endcan --}}
-                        </td>
-                        
-            </tr>
-            @empty
-            <tr>
-                <td colspan='4'><h3 class='text-center'>Data Not Found !!</h3></td>
-            </tr>
-            @endforelse
-        </tbody>
-        @endforeach
-</table>
-
+          </tr>
+      @endforeach
+    </tbody>
+  </table>
 
 
 {{-- Modal For Edit --}}
-            <div class="modal" id="myModal">
+            {{-- <div class="modal" id="myModal">
                 <div class="modal-dialog">
                 <div class="modal-content">
             
@@ -126,7 +108,7 @@
             
                 </div>
                 </div>
-            </div>
+            </div> --}}
 {{-- Modal End --}}
 
 {{-- Modal For Create Action --}}
@@ -199,17 +181,7 @@
             let newPermissionCategoryName = $('option:selected').data('name');
             let patternForPermissionName = new RegExp('^[a-zA-Z0-9]+$');
             if(patternForPermissionName.test(newPermissionName)){
-
-                $.ajax({
-                    type: "PUT",
-                    url: permissionAction,
-                    data: {permissionName:newPermissionName, permissionId, newPermissionCategoryId, newPermissionCategoryName},
-                    success: function (response) {
-                        $('#permissionname').val('');
-                        $('#myModal').hide()
-                        location.reload();
-                    }
-                });
+                ajaxRequest("PUT", permissionAction, {permissionName:newPermissionName, permissionId, newPermissionCategoryId, newPermissionCategoryName});
             }
             else{
                 alert('There is something Wrong With Permission Name !!');
@@ -231,16 +203,42 @@
             console.log(url);
             let patternForAction= new RegExp('^[a-zA-Z0-9]+$');
             if(patternForAction.test(actionName)){
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: {action_name:actionName},
-                    success: function (response) {
-                        location.reload();
-                    }
-                });
+                ajaxRequest("POST", url, {action_name:actionName});
             }
             
+        })
+
+        function ajaxRequest(type, url, data){
+            $.ajax({
+                    type: type,
+                    url: url,
+                    data: data,
+                    success: function (response) {
+                        // location.reload();
+                    }
+                });
+        }
+
+        $('input[type=checkbox]').change(function(e){
+                let isChecked = $(this).is(':checked');
+                console.log(isChecked);
+                let categoryId = $(this).parent().parent().data('category_id');
+                let actionId = $(this).parent().parent().parent().data('action_id');
+                let permissionName = $(this).val();
+                let permissionId = $(this).data('permissionid') ?? null;
+                let permissionDeleteUrl = $(this).data('deleteurl') ?? null;
+                console.log('Delete Url '+permissionDeleteUrl);
+                console.log('PermissionId '+permissionId);
+                console.log('PermissionName '+permissionName)
+                console.log('ActionId '+actionId)
+                console.log('CategoryId'+categoryId)
+                console.log('Store Url '+"{{route('permission.store')}}")
+                if(isChecked){
+                    ajaxRequest("POST", "{{route('permission.store')}}", {permissionName, permissionCategoryId:categoryId, permissionActionId:actionId})
+                }else{
+                    console.log("In Delete")
+                    ajaxRequest("DELETE", permissionDeleteUrl,{permissionName});
+                }
         })
     });
 })(jQuery);
