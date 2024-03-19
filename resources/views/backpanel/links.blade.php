@@ -12,9 +12,6 @@
         <li style='margin:15px 0;'>
             <a href="{{route('user.index')}}" class="btn d-block btn-outline-primary  mx-2 @if (Request::is('user/*') || Request::is('user')) active btn-outline-warning  @endif" >Users</a>
         </li>
-        <li style='margin:15px 0;'>
-            <a href="{{route('category.index')}}" class="btn d-block btn-outline-primary  mx-2 @if (Request::is('category/*') || Request::is('category')) active btn-outline-warning  @endif" >Category</a>
-        </li>
     @endhasanyrole 
     @hasanyrole(['Editor', 'User', 'Admin', 'Super_admin'])
         <li style='margin:15px 0;'>

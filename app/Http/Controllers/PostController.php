@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use Exception;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -26,18 +27,23 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
-        $imageName = '';
-        if($request->hasFile('image')){
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
+        try{
+
+            $imageName = '';
+            if($request->hasFile('image')){
+                $imageName = time() . '.' . $request->image->extension();
+                $request->image->move(public_path('images'), $imageName);
+            }
+            Post::create([
+                'title' => $request->title,
+                'content' => $request->content,
+                'user_id' => auth()->user()->id,
+                'image' => $imageName,
+            ]);
+            return redirect()->route('post.index')->with('success', 'Post Created Successfully');
+        }catch (Exception $e) {
+            return $e->getMessage();
         }
-        Post::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'user_id' => auth()->user()->id,
-            'image' => $imageName,
-        ]);
-        return redirect()->route('post.index')->with('success', 'Post Created Successfully');
     }
     
     /**
@@ -58,27 +64,37 @@ class PostController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Post $post){
-        $imageName = $post->image;
-        if(file_exists(public_path('images').'/'.$post->image)  && $request->image != ''){
-            unlink(public_path('images').'/'.$post->image);
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
-        }
+        try{
 
-        $post->update([
-            'title' => $request->title,
-            'content' => $request->content,
-            'user_id' => auth()->user()->id,
-            'image' => $imageName,
-        ]);
-        return redirect()->route('post.index')->with('success', 'Post Updated Successfully');
+            $imageName = $post->image;
+            if(file_exists(public_path('images').'/'.$post->image)  && $request->image != ''){
+                unlink(public_path('images').'/'.$post->image);
+                $imageName = time() . '.' . $request->image->extension();
+                $request->image->move(public_path('images'), $imageName);
+            }
+    
+            $post->update([
+                'title' => $request->title,
+                'content' => $request->content,
+                'user_id' => auth()->user()->id,
+                'image' => $imageName,
+            ]);
+            return redirect()->route('post.index')->with('success', 'Post Updated Successfully');
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Post $post){
-        $post->delete();
-        return redirect()->route('post.index')->with('success', 'Post Deleted Successfully');
+        try{
+
+            $post->delete();
+            return redirect()->route('post.index')->with('success', 'Post Deleted Successfully');
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
+use Exception;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -28,10 +29,14 @@ class RoleController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(RoleRequest $request){
-        $role = new Role();
-        $role->name = $request->name;
-        $role->save();
-        return redirect()->route('role.index')->with('success','Role Added Successfully');
+        try {
+            $role = new Role();
+            $role->name = ucfirst(strtolower($request->name));
+            $role->save();
+            return true;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -52,22 +57,36 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      */
     public function update(RoleRequest $request, Role $role){
-        $role->update($request->all());
-        return redirect()->route('role.index')->with('success','Role Updated Successfullly');
+        try {
+            $role->update($request->all());
+            return redirect()->route('role.index')->with('success','Role Updated Successfullly');
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+        
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Role $role){
-        $role->delete();
-        return redirect()->route('role.index')->with('success','Role Deleted Successfullly');
+        try {
+            $role->delete();
+            return redirect()->route('role.index')->with('success','Role Deleted Successfullly');
+        }  catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
-    public function assignPermissionView(Role $role){
-        $permissions = auth()->user()->roles[0]->permissions;
-        return view('backpanel.role.assignPermission',compact(['role', 'permissions']));
-    }
+    // public function assignPermissionView(Role $role){
+    //     try {
+    //         $permissions = auth()->user()->roles[0]->permissions;
+    //     return view('backpanel.role.assignPermission',compact(['role', 'permissions']));
+    //     } catch (Exception $e) {
+    //         return $e->getMessage();
+    //     }
+        
+    // }
     public function assignPermission(Role $role,Request $request){
         try {
             if($role->hasAnyPermission($request->permission)){
@@ -79,7 +98,7 @@ class RoleController extends Controller
             }
             return true;
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }

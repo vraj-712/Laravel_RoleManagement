@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -23,22 +24,30 @@ class UserController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(){
-        $roles = Role::all();
-        return view('backpanel.users.create',compact('roles'));
+        try {
+            $roles = Role::all();
+            return view('backpanel.users.create',compact('roles'));
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(UserRequest $request){
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-
-        ]);
-        $user->assignRole($request->role_name);
-        return redirect()->route('user.index')->with('success','User Created Successfullly');
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+    
+            ]);
+            $user->assignRole($request->role_name);
+            return redirect()->route('user.index')->with('success','User Created Successfullly');
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     
     /**
@@ -60,12 +69,16 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UserRequest $request, User $user){
-        $user->update([
-            'name' => $request->name,
-        ]);
-        $user->save();
-        $user->syncRoles([$request->role_name]);
-        return redirect()->route('user.index')->with('success','User Updated Successfullly');
+        try {
+            $user->update([
+                'name' => $request->name,
+            ]);
+            $user->save();
+            $user->syncRoles([$request->role_name]);
+            return redirect()->route('user.index')->with('success','User Updated Successfullly');
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
         
     }
     
@@ -73,7 +86,11 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(User $user){
-        $user->delete();
-        return redirect()->route('user.index')->with('success','User Deleted Successfullly');
+        try {
+            $user->delete();
+            return redirect()->route('user.index')->with('success','User Deleted Successfullly');
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

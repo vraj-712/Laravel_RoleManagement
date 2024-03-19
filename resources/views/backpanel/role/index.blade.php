@@ -13,7 +13,7 @@
 <div class="d-flex justify-content-between">
     
     @can('Create Role')
-    <a href="{{route('role.create')}}" class="btn btn-outline-success  btn">Create Role</a>
+    <a href="{{route('role.create')}}" class="btn btn-outline-success  create-role-btn">Create Role</a>
     @endcan
 </div>
 <table class="table table-hover text-center  table-bordered table-bordered table-striped">
@@ -31,7 +31,7 @@
 </thead>
         @forelse ($roles as $role)
         {{-- && auth()->user()->hasPermissionTo(['Assign Permission'] --}}
-        @if (auth()->user()->checkForAssignPermission($role) && (auth()->user()->hasPermissionTo('Assign Permission' ) ?? null))
+        @if (auth()->user()->checkForAssignPermission($role) )
         <tr>
                 <td>{{$role->name}}</td>
                 @foreach (auth()->user()->roles[0]->permissions->groupBy('category_id') as $categorypermission)
@@ -75,7 +75,45 @@
             </tr>
         @endforelse
 </table>
+{{-- Modal For Role --}}
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+    <div class="modal-content">
 
+        <!-- Modal Header -->
+        <div class="modal-header">
+        <h4 class="modal-title">Create Role</h4>
+        
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+                <div class="form-group my-4">
+                    <label for="name">Role Name</label>
+                    <input 
+                    style="border:2px solid purple;padding:5px 5px"
+                    id="name" 
+                    name="name" 
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter Role Name"
+                    data-action = "{{ route('role.store') }}"
+                    />
+                </div>
+                
+                
+                
+            </div>   
+                <!-- Modal footer -->
+                <div class="modal-footer">
+            <button class="btn btn-outline-success rounded add-btn" data-action = "{{ route('role.store') }}" >Add Role</button>
+        <button type="button" class="btn btn-danger cls-btn">Close</button>
+        </div>
+
+    </div>
+    </div>
+</div>
+{{-- Modal For Role --}}
 </div>
 @endsection
 @section('script')
@@ -88,7 +126,7 @@
             }
         });
 
-        $("input").change(function(){
+        $("input[type=checkbox]").change(function(){
                 
                 // console.log($('[name="permission[]"]:checked')) ---> Give All Checked Element Which Have name=permission[]
                 console.log($(this)[0].value) //---> this give Check Box Id  
@@ -114,16 +152,47 @@
                     url: url,
                     data: {role_id,permission},
                     success: function (response) {
-                        if(response != 1){
-                            console.log('Permission Can Not Updated');
-                        }
-                        else{
-                            console.log('Permission Updated Succesfully');
+                        if(response == true){
+                            console.log("Permission Assign SuccessFully")
+                        }else{
+                            alert("There Is Some Problem While Assigning Permission !!");
                         }
                     }
                 });
                 
             });
+        });
+
+        $('.create-role-btn').click(function (e) { 
+            e.preventDefault();
+            $('#myModal').show();
+            
+        });
+        
+        $('.cls-btn').click(function (e) { 
+            e.preventDefault();
+            $('#myModal').hide();
+            
+        });
+
+        $('.add-btn').click(function (e) { 
+            e.preventDefault();
+            let roleName = $('#name').val()
+            let url = $(this).data('action')
+            console.log(roleName + '==' + url)
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {name:roleName},
+                success: function (response) {
+                    if(response == true){
+                        location.reload();
+                    }else{
+                        alert("There Is Some Problem While Adding Role !!")
+                    }
+                }
+            });
+            
         });
     })(jQuery);
 </script>

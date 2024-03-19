@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PremissionRequest;
 use App\Models\ActionPermission;
 use App\Models\PermissionCategory;
+use Exception;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -34,16 +35,21 @@ class PermissionController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(PremissionRequest $request){
+        try{
 
-        $permission = new Permission();
-        $permission->name = $request->permissionName;
-        $permission->category_id = $request->permissionCategoryId;
-        $permission->action_id = $request->permissionActionId;
-        $permission->save();
-
-        
-        $role = Role::findByName('Super_admin');
-        $role->syncPermissions(Permission::all());
+            $permission = new Permission();
+            $permission->name = $request->permissionName;
+            $permission->category_id = $request->permissionCategoryId;
+            $permission->action_id = $request->permissionActionId;
+            $permission->save();
+    
+            
+            $role = Role::findByName('Super_admin');
+            $role->syncPermissions(Permission::all());
+            return true;
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
         
     }
     
@@ -64,21 +70,32 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PremissionRequest $request, Permission $permission){
-        $permission->update([
-            'name' => $request->permissionName .' '. $request->newPermissionCategoryName,
-            'category_id' => $request->newPermissionCategoryId
-        ]);
+    // public function update(PremissionRequest $request, Permission $permission){
+    //     try{
+
+    //         $permission->update([
+    //             'name' => $request->permissionName .' '. $request->newPermissionCategoryName,
+    //             'category_id' => $request->newPermissionCategoryId
+    //         ]);
+    //         return true;
+    //     }catch (Exception $e) {
+    //         return $e->getMessage();
+    //     }
        
-    }
+    // }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request){
-        $permission = Permission::findByName($request->permissionName);
-    //    return  $permission;
-        $permission->delete();
+        try{
+
+            $permission = Permission::findByName($request->permissionName);
+            $permission->delete();
+            return  true;
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
 
     }
 }

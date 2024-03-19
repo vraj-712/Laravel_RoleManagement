@@ -10,10 +10,8 @@
 @include('backpanel.layouts.errors')
 
 <h2>All permissions</h2>
-<div class="justify-content-between d-inline-block my-3">
-    @can('Create Permission')
-    <a href="{{route('permission.create')}}" class="btn btn-outline-success  btn">Create Permission</a>
-    @endcan
+<div class="d-flex justify-content-between">
+    <a href="{{route('category.create')}}" class="btn btn-outline-success  create-btn">Create Category For Permission</a>
 </div>
 <div class="d-inline-block my-3 justify-content-between">
     <button  class="btn btn-outline-success  create-action-btn">Create Action</button>
@@ -54,9 +52,9 @@
                             data-permissionid={{$singlePermission->id}}
                         @endif
                     @endforeach
-                    @cannot('Create Permission')
+                    {{-- @cannot('Create Permission')
                         disabled
-                    @endcannot
+                    @endcannot --}}
                     />
                 </div>
             </td>
@@ -73,7 +71,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-        <h4 class="modal-title">Update Permission</h4>
+        <h4 class="modal-title">Create Action</h4>
         
         </div>
 
@@ -105,6 +103,45 @@
     </div>
 </div>
 {{-- Modal End For Create Action --}}
+{{-- Modal --}}
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+        <h4 class="modal-title">Create Category</h4>
+        
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+                <div class="form-group my-4">
+                    <label for="name">Category Name</label>
+                    <input 
+                    style="border:2px solid purple;padding:5px 5px"
+                    id="category_name" 
+                    name="category_name" 
+                    type="text"
+                    class="form-control"
+                    placeholder="Enter Category Name"
+                    data-action = "{{ route('category.store') }}"
+                    />
+                </div>
+                
+                
+                
+            </div>   
+                <!-- Modal footer -->
+                <div class="modal-footer">
+            <button class="btn btn-outline-success rounded add-btn" data-action = "{{ route('category.store') }}" >Add Category</button>
+        <button type="button" class="btn btn-danger cls-btn">Close</button>
+        </div>
+
+    </div>
+    </div>
+</div>
+{{-- Modal End --}}
 </div>
 @endsection
 @section('script')
@@ -173,7 +210,11 @@
                     url: url,
                     data: data,
                     success: function (response) {
-                        console.log(response)
+                        if(response == true){
+                            console.log('All Things Are Going Soomthly');
+                        }else{
+                            alert('There Is Some Error!!');
+                        }
                     }
                 });
         }
@@ -201,6 +242,36 @@
                     ajaxRequest("DELETE", url, {permissionName});
                 }
         })
+        $('.create-btn').click(function (e) { 
+            e.preventDefault();
+            $('#myModal').show();
+            
+        });
+        
+        $('.cls-btn').click(function (e) { 
+            e.preventDefault();
+            $('#myModal').hide();
+            
+        });
+
+        $('.add-btn').click(function (e) { 
+            e.preventDefault();
+            let categoryName = $('#category_name').val()
+            let url = $(this).data('action')
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {categoryName},
+                success: function (response) {
+                    if(response == true){
+                        location.reload()
+                    }else{
+                        alert('There Is Some Problem While Adding Permission Category');
+                    }
+                }
+            });
+            
+        });
     });
 })(jQuery);
 </script>

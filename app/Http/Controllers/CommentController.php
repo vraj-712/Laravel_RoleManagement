@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -26,15 +27,19 @@ class CommentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request){
+        try{
 
-        Comment::create([
-            'user_id' => auth()->user()->id,
-            'post_id' => $request->post_id,
-            'comment' => $request->comment,
-            'parent_id' => $request->parent_id ?? null,
-        ]);
-
-        return redirect()->route('post.show',$request->post_id)->with('success','Commented Added Successfully');
+            Comment::create([
+                'user_id' => auth()->user()->id,
+                'post_id' => $request->post_id,
+                'comment' => $request->comment,
+                'parent_id' => $request->parent_id ?? null,
+            ]);
+    
+            return redirect()->route('post.show',$request->post_id)->with('success','Commented Added Successfully');
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -62,13 +67,22 @@ class CommentController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Comment $comment){
-        
-        Comment::where('id',$comment->id)->orWhere('parent_id',$comment->id)->delete();
-        return redirect()->route('comment.index')->with('success', 'Comment Deleted Successfully');
+        try{
+
+            Comment::where('id',$comment->id)->orWhere('parent_id',$comment->id)->delete();
+            return redirect()->route('comment.index')->with('success', 'Comment Deleted Successfully');
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
     public function approveComment(Comment $comment){
-        $comment->status = !$comment->status;
-        $comment->save();
-        return redirect()->route('comment.index')->with('success', 'Comment Status Updated');
+        try{
+
+            $comment->status = !$comment->status;
+            $comment->save();
+            return redirect()->route('comment.index')->with('success', 'Comment Status Updated');
+        }catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
