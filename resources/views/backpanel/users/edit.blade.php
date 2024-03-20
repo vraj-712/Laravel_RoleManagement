@@ -44,7 +44,7 @@
                 <label for="roles">Roles</label>
                 <select name="role_name" id="roles" class='form-control' style="border:2px solid purple;padding:5px;">
                     @foreach ($roles as $role)
-                    @if (auth()->user()->checkRoles($role))
+                    @if (auth()->user()->checkRoles($role) )
                     <option value="{{$role->name}}"@if($role->id === $user->roles[0]->id) selected @endif>{{strtoupper($role->name)}}</option>
                     @endif
                     @endforeach
