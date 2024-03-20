@@ -40,7 +40,7 @@
 
     
     
-    @can('Can Comment')
+    @can('Create Comment')
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show m-5" role="alert">
             {{session('success')}}
@@ -71,7 +71,7 @@
                 <div style="border:2px solid black;" class=" rounded p-3 my-2">
                     <p class="fs-5"> @ {{$mainComment->user->name}}&nbsp;<span style="font-size:12px;" class="text-secondary">{{$mainComment->created_at->diffForHumans()}}</span></p>
                     <p class="ms-5">{{$mainComment->comment}}</p>
-                    @can('Can Comment')
+                    @can('Create Comment')
                     <a href='#comment-form' class='btn btn-info'onclick="document.getElementById('parent_id').value = {{$mainComment->id}}">Reply</a>
                     @endcan
                     

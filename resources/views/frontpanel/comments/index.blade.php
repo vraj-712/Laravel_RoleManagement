@@ -32,7 +32,7 @@
                 @endif
             </td>
             <td>
-                @can('Check Comment')
+                @can('Update Comment')
                     <form action="{{route('approve-comment',$comment->id)}}" method="POST" class='d-inline'>
                         @csrf
                         @if(!$comment->status)

@@ -43,6 +43,10 @@ class RegisteredUserController extends Controller
         ]);
 
         $user->assignRole('user');
+        $user->createToken('admin-token', ['create', 'update', 'delete']);
+
+
+
         event(new Registered($user));
 
         Auth::login($user);
