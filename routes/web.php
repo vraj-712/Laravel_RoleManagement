@@ -1,15 +1,18 @@
 <?php
 
-use App\Http\Controllers\ActionPermissionController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\PermissionCategoryController;
-use App\Http\Controllers\PermissionController;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use App\Models\Post;
-use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ActionPermissionController;
+use App\Http\Controllers\PermissionCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +32,24 @@ Route::get('/', function () {
     return view('welcome')->with('posts', Post::all());
 });
 
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+ 
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
+    // dd($googleUser->user['name']);
+    $user = User::create([
+        'name' => $googleUser->user['name'],
+        'email' => $googleUser->user['email'],
+        'password' => Hash::make('guest@1234'),
+    ]);
+    $user->assignRole('user');
+    Auth::login($user);
+ 
+    return redirect('/');
+    // $user->token
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

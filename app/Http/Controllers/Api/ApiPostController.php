@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiPostController extends Controller
 {
@@ -38,22 +39,34 @@ class ApiPostController extends Controller
     public function store(Request $request)
     {
         try{
+            $user = auth('sanctum')->user();
+            if(!$user){
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Unauthorized Request'
+                ]);
+            }
             $imageName = '';
                 if($request->hasFile('image')){
                     $imageName = time() . '.' . $request->image->extension();
                     $request->image->move(public_path('images'), $imageName);
                 }
-             Post::create([
+            
+
+
+            $post =  Post::create([
                     'title' => $request->title,
                     'content' => $request->content,
-                    'user_id' => 5,
+                    'user_id' => $user->id,
                     'image' => $imageName,
                 ]);
+            $post = new PostResource($post);
             return response()->json([
                 "status" => 200,
+                "data" => $post,
                 "message" => "Post Added SuccessFully",
             ]);
-        }catch(\Exception $e){
+        }catch(Exception $e){
             return response()->json([
                 "status" => 500,
                 "message" => $e->getMessage(),
@@ -66,9 +79,10 @@ class ApiPostController extends Controller
      */
     public function show(Post $post)
     {
+        
         return response()->json([
             "status" => 200,
-            "data" => $post
+            "data" => new PostResource($post)
         ]);
     }
 
@@ -85,8 +99,23 @@ class ApiPostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        
         try{
+            $user = auth('sanctum')->user();
+            if(!$user){
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Unauthorized Request'
+                ]);
+            }
+            if(!($user->id == $post->user_id)){
 
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Unauthorized Request'
+                ]);
+                
+            }
             $imageName = $post->image;
                 if(file_exists(public_path('images').'/'.$post->image)  && $request->image != ''){
                     unlink(public_path('images').'/'.$post->image);
@@ -95,10 +124,10 @@ class ApiPostController extends Controller
                 }
         
                 $post->update([
-                    'title' => $request->title,
-                    'content' => $request->content,
-                    'user_id' => 5,
-                    'image' => $imageName,
+                    'title' => $request->title ?? $post->title,
+                    'content' => $request->content ?? $post->content,
+                    'user_id' => $user->id,
+                    'image' => $imageName ?? $post->image,
                 ]);
                 return response()->json([
                     "status" => 200,
@@ -118,6 +147,15 @@ class ApiPostController extends Controller
     public function destroy(Post $post)
     {
         try{
+            $user = auth('sanctum')->user();
+            if(!($user->id == $post->user_id)){
+
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Unauthorized Request'
+                ]);
+                
+            }
             $post->delete();
             return response()->json([
                 "status" => 200,

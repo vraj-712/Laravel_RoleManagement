@@ -43,14 +43,17 @@ class RegisteredUserController extends Controller
         ]);
 
         $user->assignRole('user');
-        $user->createToken('admin-token', ['create', 'update', 'delete']);
-
-
-
+        $token = $user->createToken('admin-token', ['create', 'update', 'delete'])->plainTextToken;
         event(new Registered($user));
-
         Auth::login($user);
+        $res = [
+            'user' => $user,
+            'token' =>$token
+        ];
+        return response()->json($res);
+        
 
-        return redirect(RouteServiceProvider::HOME);
+
+        // return redirect(RouteServiceProvider::HOME);
     }
 }
