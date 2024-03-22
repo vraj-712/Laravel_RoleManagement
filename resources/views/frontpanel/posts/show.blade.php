@@ -10,6 +10,30 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        div#social-links {
+            margin: 0 auto;
+            max-width: 500px;
+        }
+        div#social-links ul{
+            text-align: center;
+        }
+        div#social-links ul li {
+            display: inline-block;
+            margin: 2px;
+        }          
+        div#social-links ul li a {
+            padding: 7px 13px;
+            border: 1px solid #ccc;
+            margin: 7px;
+            font-size: 30px;
+            color: #222;
+            background-color: #ccc;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
     <h3 class="bg-dark text-white p-3 d-flex justify-content-between align-items-center ">Blog Page 
@@ -85,6 +109,10 @@
                 </div>
             @endif
         @endforeach
+        <div class="container mt-4">
+            <h2 class="mb-5 text-white text-center">Laravel Social Share Buttons Example</h2>
+            {!!$shareComponent!!}
+        </div>
     </div>
     
 </div>

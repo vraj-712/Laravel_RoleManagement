@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('permissions', function (Blueprint $table) {
-            $table->unsignedBigInteger('category_id')->default(1);
-            $table->foreign('category_id')->references('id')->on('permission_categories');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('provider')->nullable();
         });
     }
 
@@ -22,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('permissions', function (Blueprint $table) {
-            
+        Schema::table('users', function (Blueprint $table) {
+            //
         });
     }
 };

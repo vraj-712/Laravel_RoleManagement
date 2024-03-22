@@ -47,5 +47,7 @@
         @endforelse
 </table>
 </div>
+            
+        
 </div>
 @endsection

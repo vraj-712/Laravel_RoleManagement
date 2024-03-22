@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Post;
 use Exception;
+use App\Models\Post;
+use App\Mail\SendDemoMail;
 use Illuminate\Http\Request;
+use Jorenvh\Share\ShareFacade;
+use App\Mail\MailWithAttachment;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -40,6 +44,14 @@ class PostController extends Controller
                 'user_id' => auth()->user()->id,
                 'image' => $imageName,
             ]);
+            $data = [
+                'postTitle' => $request->title,
+                'name' => auth()->user()->name,
+                'content' => $request->content,
+                'file' => public_path('images').'/'.$imageName
+            ];
+
+            Mail::to(auth()->user()->email)->send(new SendDemoMail($data));
             return redirect()->route('post.index')->with('success', 'Post Created Successfully');
         }catch (Exception $e) {
             return $e->getMessage();
@@ -50,14 +62,25 @@ class PostController extends Controller
      * Display the specified resource.
      */
     public function show(Post $post){
-        return view('frontpanel.posts.show',compact('post'));
+        // return url()->current();
+        $shareComponent = ShareFacade::page(
+            route('post.show',$post->id),
+            'Your share text comes here',
+        )
+        ->facebook()
+        ->twitter()
+        ->linkedin()
+        ->telegram()
+        ->whatsapp()        
+        ->reddit();
+        return view('frontpanel.posts.show',compact(['post', 'shareComponent']));
     }
     
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Post $post){
-        return view('frontpanel.posts.edit',compact('post'));
+        return view('frontpanel.posts.edit',compact(['post']));
     }
     
     /**
