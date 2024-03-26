@@ -1,9 +1,9 @@
 <?php
 
-use Jorenvh\Share\ShareFacade;
 use App\Models\Post;
 use App\Models\User;
 use App\Mail\MailerForGmail;
+use Jorenvh\Share\ShareFacade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -13,6 +13,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialiteController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ActionPermissionController;
 use App\Http\Controllers\PermissionCategoryController;
@@ -67,6 +68,7 @@ Route::group(['middleware' =>['auth', 'role:Admin|Super_admin|Editor|User'],'pre
     Route::resource('/post',PostController::class);
     Route::resource('/comment',CommentController::class);
 });
-
+Route::get('file-upload', [FileUploadController::class, 'index'])->name('files.index');
+Route::post('file-upload/upload-large-files', [FileUploadController::class, 'uploadLargeFiles'])->name('files.upload.large');
 
 require __DIR__.'/auth.php';
