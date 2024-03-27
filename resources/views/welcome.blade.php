@@ -143,8 +143,8 @@
                             </div>
                         </div>
         
-                        <div class="card-footer p-4" >
-                            <video id="videoPreview" src="" controls style="width: 100%; height: auto"></video>
+                        <div class="card-footer p-4 box" >
+                            {{-- <video id="videoPreview" src="" controls style="width: 100%; height: auto"></video> --}}
                         </div>
                     </div>
                 </div>
@@ -169,6 +169,7 @@
             resumable.assignBrowse(browseFile[0]);
         
             resumable.on('fileAdded', function (file) { // trigger when file picked
+                $('.box').html('');
                 showProgress();
                 resumable.upload() // to actually start uploading.
             });
@@ -178,10 +179,13 @@
             });
         
             resumable.on('fileSuccess', function (file, response) { // trigger when file upload complete
+                console.log(response);
                 response = JSON.parse(response)
-                $('#videoPreview').attr('src', response.path);
+                
+                $('.box').append(`
+                <video id='${response.path}' src="${response.path}" controls style="margin:5px 0;width: 100%; height: auto"></video>
+                `);
                 $('.card-footer').show();
-                $('.progress').hide();
             });
         
             resumable.on('fileError', function (file, response) { // trigger when there is any error
