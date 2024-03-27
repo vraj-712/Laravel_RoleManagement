@@ -192,12 +192,12 @@
                 alert('file uploading error.')
             });
         
-        
             let progress = $('.progress');
             function showProgress() {
                 progress.find('.progress-bar').css('width', '0%');
                 progress.find('.progress-bar').html('0%');
                 progress.find('.progress-bar').removeClass('bg-success');
+             
                 progress.show();
             }
         
