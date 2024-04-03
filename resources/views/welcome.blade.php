@@ -162,6 +162,7 @@
                 headers: {
                     'Accept' : 'application/json'
                 },
+                chunkSize:10*1024*1024,
                 testChunks: false,
                 throttleProgressCallbacks: 1,
             });
